@@ -1,5 +1,10 @@
-package com.hexaware.MaverickBank.Modal;
-import javax.persistence.*;
+package com.hexaware.MaverickBank.entity;
+
+import jakarta.persistence.*;
+
+import java.sql.Date;
+import java.sql.Timestamp;
+
 import java.util.Set;
 
 @Entity
@@ -37,6 +42,28 @@ public class Customer {
 
     @OneToMany(mappedBy = "customer")
     private Set<Beneficiary> beneficiaries;
+
+    public Customer(){}
+
+    public Customer(Integer customerId, String firstName, String lastName, String email, String password, String contactNumber, String address, String aadharNumber, String panNumber, Date dateOfBirth, Timestamp createdAt, Timestamp updatedAt, Bank bank, Role role, Set<Account> accounts, Set<Loan> loans, Set<Beneficiary> beneficiaries) {
+        this.customerId = customerId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.contactNumber = contactNumber;
+        this.address = address;
+        this.aadharNumber = aadharNumber;
+        this.panNumber = panNumber;
+        this.dateOfBirth = dateOfBirth;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.bank = bank;
+        this.role = role;
+        this.accounts = accounts;
+        this.loans = loans;
+        this.beneficiaries = beneficiaries;
+    }
 
     public Set<Beneficiary> getBeneficiaries() {
         return beneficiaries;

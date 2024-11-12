@@ -1,7 +1,10 @@
-package com.hexaware.MaverickBank.Modal;
+package com.hexaware.MaverickBank.entity;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
+
 import java.math.BigDecimal;
+import java.sql.Timestamp;
+
 
 @Entity
 @Table(name = "loan")
@@ -20,6 +23,18 @@ public class Loan {
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
+
+    public Loan(){}
+    public Loan(Integer loanId, BigDecimal loanAmount, BigDecimal interestRate, Integer tenure, String status, Timestamp createdAt, Timestamp updatedAt, Customer customer) {
+        this.loanId = loanId;
+        this.loanAmount = loanAmount;
+        this.interestRate = interestRate;
+        this.tenure = tenure;
+        this.status = status;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.customer = customer;
+    }
 
     public Integer getLoanId() {
         return loanId;

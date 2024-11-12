@@ -1,6 +1,6 @@
-package com.hexaware.MaverickBank.Modal;
+package com.hexaware.MaverickBank.entity;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "beneficiary")
@@ -15,6 +15,15 @@ public class Beneficiary {
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
+
+    public Beneficiary(){}
+
+    public Beneficiary(Integer beneficiaryId, String beneficiaryName, String relationship, Customer customer) {
+        this.beneficiaryId = beneficiaryId;
+        this.beneficiaryName = beneficiaryName;
+        this.relationship = relationship;
+        this.customer = customer;
+    }
 
     public Integer getBeneficiaryId() {
         return beneficiaryId;

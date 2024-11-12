@@ -1,6 +1,8 @@
-package com.hexaware.MaverickBank.Modal;
+package com.hexaware.MaverickBank.entity;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
+
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "transaction")
@@ -17,6 +19,17 @@ public class Transaction {
     @ManyToOne
     @JoinColumn(name = "account_id")
     private Account account;
+
+    public Transaction(){}
+
+    public Transaction(Integer transactionId, String transactionType, Double amount, Timestamp transactionDate, String destinationAccount, Account account) {
+        this.transactionId = transactionId;
+        this.transactionType = transactionType;
+        this.amount = amount;
+        this.transactionDate = transactionDate;
+        this.destinationAccount = destinationAccount;
+        this.account = account;
+    }
 
     public Integer getTransactionId() {
         return transactionId;

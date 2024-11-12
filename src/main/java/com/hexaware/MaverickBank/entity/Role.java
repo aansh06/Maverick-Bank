@@ -1,6 +1,7 @@
-package com.hexaware.MaverickBank.Modal;
+package com.hexaware.MaverickBank.entity;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
+
 import java.util.Set;
 
 @Entity
@@ -17,6 +18,15 @@ public class Role {
 
     @OneToMany(mappedBy = "role")
     private Set<Customer> customers;
+
+    public Role(){}
+
+    public Role(Integer roleId, String roleName, Set<BankEmployee> employees, Set<Customer> customers) {
+        this.roleId = roleId;
+        this.roleName = roleName;
+        this.employees = employees;
+        this.customers = customers;
+    }
 
     public Integer getRoleId() {
         return roleId;

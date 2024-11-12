@@ -1,6 +1,9 @@
-package com.hexaware.MaverickBank.Modal;
+package com.hexaware.MaverickBank.entity;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
+
+
+import java.sql.Timestamp;
 import java.util.Set;
 
 @Entity
@@ -24,6 +27,21 @@ public class Account {
 
     @OneToMany(mappedBy = "account")
     private Set<Transaction> transactions;
+
+    public Account(){}
+
+    public Account(Integer accountId, String accountType, String accountNumber, Double balance, String branchName, String ifscCode, Timestamp createdAt, Timestamp updatedAt, Customer customer, Set<Transaction> transactions) {
+        this.accountId = accountId;
+        this.accountType = accountType;
+        this.accountNumber = accountNumber;
+        this.balance = balance;
+        this.branchName = branchName;
+        this.ifscCode = ifscCode;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.customer = customer;
+        this.transactions = transactions;
+    }
 
     public Integer getAccountId() {
         return accountId;
