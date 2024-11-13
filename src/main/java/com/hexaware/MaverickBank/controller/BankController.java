@@ -1,6 +1,7 @@
 package com.hexaware.MaverickBank.controller;
 
 
+import com.hexaware.MaverickBank.dto.BankDTO;
 import com.hexaware.MaverickBank.entity.Bank;
 import com.hexaware.MaverickBank.service.BankService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,26 +23,26 @@ public class BankController {
     }
 
     @PostMapping
-    public ResponseEntity<Bank> createBank(@RequestBody Bank bank) {
-        Bank createdBank = bankService.createBank(bank);
+    public ResponseEntity<BankDTO> createBank(@RequestBody BankDTO bank) {
+        BankDTO createdBank = bankService.createBank(bank);
         return new ResponseEntity<>(createdBank, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Bank> getBankById(@PathVariable("id") Integer id) {
-        Bank bank = bankService.getBankById(id);
+    public ResponseEntity<BankDTO> getBankById(@PathVariable("id") Integer id) {
+        BankDTO bank = bankService.getBankById(id);
         return new ResponseEntity<>(bank, HttpStatus.OK);
     }
 
     @GetMapping
-    public ResponseEntity<List<Bank>> getAllBanks() {
-        List<Bank> banks = bankService.getAllBanks();
+    public ResponseEntity<List<BankDTO>> getAllBanks() {
+        List<BankDTO> banks = bankService.getAllBanks();
         return new ResponseEntity<>(banks, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Bank> updateBank(@PathVariable("id") Integer id, @RequestBody Bank bank) {
-        Bank updatedBank = bankService.updateBank(id, bank);
+    public ResponseEntity<BankDTO> updateBank(@PathVariable("id") Integer id, @RequestBody BankDTO bank) {
+        BankDTO updatedBank = bankService.updateBank(id, bank);
         return new ResponseEntity<>(updatedBank, HttpStatus.OK);
     }
 

@@ -1,12 +1,15 @@
 package com.hexaware.MaverickBank.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "bankemployee")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "employeeId")
+
 public class BankEmployee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,9 +35,9 @@ public class BankEmployee {
     @JoinColumn(name = "bank_id", nullable = false)
     private Bank bank;
 
-//    @ManyToOne
-//    @JoinColumn(name = "role_id")
-//    private Role role;
+    @ManyToOne
+    @JoinColumn(name = "role_id", nullable = false)
+    private Role role;
 
 
 
@@ -42,17 +45,17 @@ public class BankEmployee {
 
     public BankEmployee(){}
 
-//    public BankEmployee(Integer employeeId, String firstName, String lastName, String email, String password, LocalDateTime createdAt, LocalDateTime updatedAt, Bank bank, Role role) {
-//        this.employeeId = employeeId;
-//        this.firstName = firstName;
-//        this.lastName = lastName;
-//        this.email = email;
-//        this.password = password;
-//        this.createdAt = createdAt;
-//        this.updatedAt = updatedAt;
-//        this.bank = bank;
-//        this.role = role;
-//    }
+    public BankEmployee(Integer employeeId, String firstName, String lastName, String email, String password, LocalDateTime createdAt, LocalDateTime updatedAt, Bank bank, Role role) {
+        this.employeeId = employeeId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.bank = bank;
+        this.role = role;
+    }
 
     public Integer getEmployeeId() {
         return employeeId;
@@ -118,13 +121,13 @@ public class BankEmployee {
         this.bank = bank;
     }
 
-//    public Role getRole() {
-//        return role;
-//    }
-//
-//    public void setRole(Role role) {
-//        this.role = role;
-//    }
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
 
     @Override
     public String toString() {
@@ -137,7 +140,7 @@ public class BankEmployee {
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 ", bank=" + bank +
-//                ", role=" + role +
+                ", role=" + role +
                 '}';
     }
 }

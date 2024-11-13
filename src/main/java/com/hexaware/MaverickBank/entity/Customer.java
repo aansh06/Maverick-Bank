@@ -1,93 +1,107 @@
 package com.hexaware.MaverickBank.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 
 import java.sql.Date;
 import java.sql.Timestamp;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
 @Table(name = "customer")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "customerId")
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer customerId;
-
+    @Column(name = "first_name", nullable = false)
     private String firstName;
+    @Column(name = "last_name", nullable = false)
     private String lastName;
+    @Column(name = "email",unique = true, nullable = false)
     private String email;
+    @Column(name = "password", nullable = false)
     private String password;
+    @Column(name = "contact_number")
     private String contactNumber;
+    @Column(name = "address")
     private String address;
+    @Column(name = "aadhar_number",unique = true, nullable = false)
     private String aadharNumber;
+    @Column(name = "pan_number",unique = true)
     private String panNumber;
+    @Column(name = "date_of_birth", nullable = false)
     private Date dateOfBirth;
-    private Timestamp createdAt;
-    private Timestamp updatedAt;
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 
     @ManyToOne
-    @JoinColumn(name = "bank_id")
+    @JoinColumn(name = "bank_id",nullable = false)
     private Bank bank;
 
     @ManyToOne
-    @JoinColumn(name = "role_id")
+    @JoinColumn(name = "role_id",nullable = false)
     private Role role;
 
-    @OneToMany(mappedBy = "customer")
-    private Set<Account> accounts;
-
-    @OneToMany(mappedBy = "customer")
-    private Set<Loan> loans;
-
-    @OneToMany(mappedBy = "customer")
-    private Set<Beneficiary> beneficiaries;
+//    @OneToMany(mappedBy = "customer")
+//    private Set<Account> accounts;
+//
+//    @OneToMany(mappedBy = "customer")
+//    private Set<Loan> loans;
+//
+//    @OneToMany(mappedBy = "customer")
+//    private Set<Beneficiary> beneficiaries;
 
     public Customer(){}
 
-    public Customer(Integer customerId, String firstName, String lastName, String email, String password, String contactNumber, String address, String aadharNumber, String panNumber, Date dateOfBirth, Timestamp createdAt, Timestamp updatedAt, Bank bank, Role role, Set<Account> accounts, Set<Loan> loans, Set<Beneficiary> beneficiaries) {
-        this.customerId = customerId;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.password = password;
-        this.contactNumber = contactNumber;
-        this.address = address;
-        this.aadharNumber = aadharNumber;
-        this.panNumber = panNumber;
-        this.dateOfBirth = dateOfBirth;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.bank = bank;
-        this.role = role;
-        this.accounts = accounts;
-        this.loans = loans;
-        this.beneficiaries = beneficiaries;
-    }
+//    public Customer(Integer customerId, String firstName, String lastName, String email, String password, String contactNumber, String address, String aadharNumber, String panNumber, Date dateOfBirth, LocalDateTime createdAt, LocalDateTime updatedAt, Bank bank, Role role, Set<Account> accounts, Set<Loan> loans, Set<Beneficiary> beneficiaries) {
+//        this.customerId = customerId;
+//        this.firstName = firstName;
+//        this.lastName = lastName;
+//        this.email = email;
+//        this.password = password;
+//        this.contactNumber = contactNumber;
+//        this.address = address;
+//        this.aadharNumber = aadharNumber;
+//        this.panNumber = panNumber;
+//        this.dateOfBirth = dateOfBirth;
+//        this.createdAt = createdAt;
+//        this.updatedAt = updatedAt;
+//        this.bank = bank;
+//        this.role = role;
+//        this.accounts = accounts;
+//        this.loans = loans;
+//        this.beneficiaries = beneficiaries;
+//    }
 
-    public Set<Beneficiary> getBeneficiaries() {
-        return beneficiaries;
-    }
-
-    public void setBeneficiaries(Set<Beneficiary> beneficiaries) {
-        this.beneficiaries = beneficiaries;
-    }
-
-    public Set<Loan> getLoans() {
-        return loans;
-    }
-
-    public void setLoans(Set<Loan> loans) {
-        this.loans = loans;
-    }
-
-    public Set<Account> getAccounts() {
-        return accounts;
-    }
-
-    public void setAccounts(Set<Account> accounts) {
-        this.accounts = accounts;
-    }
+//    public Set<Beneficiary> getBeneficiaries() {
+//        return beneficiaries;
+//    }
+//
+//    public void setBeneficiaries(Set<Beneficiary> beneficiaries) {
+//        this.beneficiaries = beneficiaries;
+//    }
+//
+//    public Set<Loan> getLoans() {
+//        return loans;
+//    }
+//
+//    public void setLoans(Set<Loan> loans) {
+//        this.loans = loans;
+//    }
+//
+//    public Set<Account> getAccounts() {
+//        return accounts;
+//    }
+//
+//    public void setAccounts(Set<Account> accounts) {
+//        this.accounts = accounts;
+//    }
 
     public Role getRole() {
         return role;
@@ -105,19 +119,19 @@ public class Customer {
         this.bank = bank;
     }
 
-    public Timestamp getUpdatedAt() {
+    public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Timestamp updatedAt) {
+    public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
 
-    public Timestamp getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Timestamp createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
@@ -218,9 +232,9 @@ public class Customer {
                 ", updatedAt=" + updatedAt +
                 ", bank=" + bank +
                 ", role=" + role +
-                ", accounts=" + accounts +
-                ", loans=" + loans +
-                ", beneficiaries=" + beneficiaries +
+//                ", accounts=" + accounts +
+//                ", loans=" + loans +
+//                ", beneficiaries=" + beneficiaries +
                 '}';
     }
 }

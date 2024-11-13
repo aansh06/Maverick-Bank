@@ -1,14 +1,16 @@
 package com.hexaware.MaverickBank.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
 @Table(name = "bank")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "bankId")
 public class Bank {
 
     @Id
@@ -28,25 +30,25 @@ public class Bank {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-//    @OneToMany(mappedBy = "bank")
-//    private Set<BankEmployee> employees;
-//
-//    @OneToMany(mappedBy = "bank")
-//    private Set<Customer> customers;
+    @OneToMany(mappedBy = "bank")
+    private Set<BankEmployee> employees;
+
+    @OneToMany(mappedBy = "bank")
+    private Set<Customer> customers;
 
     public Bank(){}
 
-//    public Bank(Integer bankId, String bankName, String address, String contactNumber, String email, LocalDateTime createdAt, LocalDateTime updatedAt, Set<BankEmployee> employees, Set<Customer> customers) {
-//        this.bankId = bankId;
-//        this.bankName = bankName;
-//        this.address = address;
-//        this.contactNumber = contactNumber;
-//        this.email = email;
-//        this.createdAt = createdAt;
-//        this.updatedAt = updatedAt;
-//        this.employees = employees;
-//        this.customers = customers;
-//    }
+    public Bank(Integer bankId, String bankName, String address, String contactNumber, String email, LocalDateTime createdAt, LocalDateTime updatedAt, Set<BankEmployee> employees, Set<Customer> customers) {
+        this.bankId = bankId;
+        this.bankName = bankName;
+        this.address = address;
+        this.contactNumber = contactNumber;
+        this.email = email;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.employees = employees;
+        this.customers = customers;
+    }
 
     public Integer getBankId() {
         return bankId;
@@ -104,21 +106,21 @@ public class Bank {
         this.updatedAt = updatedAt;
     }
 
-//    public Set<BankEmployee> getEmployees() {
-//        return employees;
-//    }
-//
-//    public void setEmployees(Set<BankEmployee> employees) {
-//        this.employees = employees;
-//    }
-//
-//    public Set<Customer> getCustomers() {
-//        return customers;
-//    }
-//
-//    public void setCustomers(Set<Customer> customers) {
-//        this.customers = customers;
-//    }
+    public Set<BankEmployee> getEmployees() {
+        return employees;
+    }
+
+    public void setEmployees(Set<BankEmployee> employees) {
+        this.employees = employees;
+    }
+
+    public Set<Customer> getCustomers() {
+        return customers;
+    }
+
+    public void setCustomers(Set<Customer> customers) {
+        this.customers = customers;
+    }
 
     @Override
     public String toString() {
@@ -130,8 +132,8 @@ public class Bank {
                 ", email='" + email + '\'' +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
-//                ", employees=" + employees +
-//                ", customers=" + customers +
+                ", employees=" + employees +
+                ", customers=" + customers +
                 '}';
     }
 }
