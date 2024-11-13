@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
@@ -12,35 +13,53 @@ public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer accountId;
-
+    @Column(name = "account_type", nullable = false)
     private String accountType;
+    @Column(name = "account_number", unique = true, nullable = false)
     private String accountNumber;
+    @Column(name = "balance", nullable = false)
     private Double balance;
-    private String branchName;
-    private String ifscCode;
-    private Timestamp createdAt;
-    private Timestamp updatedAt;
+    @Column(name = "status", nullable = false)
+    private String status; // [ "Active", "Inactive","Under Verification" "Closed"]
+
+//    private String branchName;
+//    private String ifscCode;
+//
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+
+
+
 
     @ManyToOne
-    @JoinColumn(name = "customer_id")
+    @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
+
+    @ManyToOne
+    @JoinColumn(name = "bank_id", nullable = false)
+    private Bank bank;
+
 
     @OneToMany(mappedBy = "account")
     private Set<Transaction> transactions;
 
     public Account(){}
 
-    public Account(Integer accountId, String accountType, String accountNumber, Double balance, String branchName, String ifscCode, Timestamp createdAt, Timestamp updatedAt, Customer customer, Set<Transaction> transactions) {
+    public Account(Integer accountId, String accountType, String accountNumber, Double balance, String status, LocalDateTime createdAt, LocalDateTime updatedAt, Customer customer, Bank bank, Set<Transaction> transactions) {
         this.accountId = accountId;
         this.accountType = accountType;
         this.accountNumber = accountNumber;
         this.balance = balance;
-        this.branchName = branchName;
-        this.ifscCode = ifscCode;
+        this.status = status;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.customer = customer;
-        this.transactions = transactions;
+        this.bank = bank;
+//        this.transactions = transactions;
     }
 
     public Integer getAccountId() {
@@ -75,35 +94,51 @@ public class Account {
         this.balance = balance;
     }
 
-    public String getBranchName() {
-        return branchName;
+//    public String getBranchName() {
+//        return branchName;
+//    }
+//
+//    public void setBranchName(String branchName) {
+//        this.branchName = branchName;
+//    }
+//
+//    public String getIfscCode() {
+//        return ifscCode;
+//    }
+//
+//    public void setIfscCode(String ifscCode) {
+//        this.ifscCode = ifscCode;
+//    }
+
+    public String getStatus() {
+        return status;
     }
 
-    public void setBranchName(String branchName) {
-        this.branchName = branchName;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
-    public String getIfscCode() {
-        return ifscCode;
+    public Bank getBank() {
+        return bank;
     }
 
-    public void setIfscCode(String ifscCode) {
-        this.ifscCode = ifscCode;
+    public void setBank(Bank bank) {
+        this.bank = bank;
     }
 
-    public Timestamp getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Timestamp createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public Timestamp getUpdatedAt() {
+    public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Timestamp updatedAt) {
+    public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
 
@@ -115,27 +150,13 @@ public class Account {
         this.customer = customer;
     }
 
-    public Set<Transaction> getTransactions() {
-        return transactions;
-    }
+//    public Set<Transaction> getTransactions() {
+//        return transactions;
+//    }
+//
+//    public void setTransactions(Set<Transaction> transactions) {
+//        this.transactions = transactions;
+//    }
 
-    public void setTransactions(Set<Transaction> transactions) {
-        this.transactions = transactions;
-    }
 
-    @Override
-    public String toString() {
-        return "Account{" +
-                "accountId=" + accountId +
-                ", accountType='" + accountType + '\'' +
-                ", accountNumber='" + accountNumber + '\'' +
-                ", balance=" + balance +
-                ", branchName='" + branchName + '\'' +
-                ", ifscCode='" + ifscCode + '\'' +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                ", customer=" + customer +
-                ", transactions=" + transactions +
-                '}';
-    }
 }
