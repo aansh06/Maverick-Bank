@@ -1,6 +1,7 @@
 package com.hexaware.MaverickBank.dto;
 
 public class AccountDTO {
+    private Integer accId;
     private String accountNumber;
     private Double balance;
     private String accountType;
@@ -54,5 +55,13 @@ public class AccountDTO {
 
     public void setBankId(Integer bankId) {
         this.bankId = bankId;
+    }
+
+    public Integer getAccId() {
+        return accId;
+    }
+
+    public void setAccId(Integer accId) {
+        this.accId = accId;
     }
 }

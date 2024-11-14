@@ -1,38 +1,59 @@
 package com.hexaware.MaverickBank.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 
 
 @Entity
 @Table(name = "loan")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "loanId")
 public class Loan {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer loanId;
+    @Column(name = "loan_type", nullable = false)
+    private String loanType; // [ "Personal", "Home", "Auto"]
 
-    private BigDecimal loanAmount;
-    private BigDecimal interestRate;
-    private Integer tenure;
+    @Column(name = "principal_amount", nullable = false)
+    private Double principalAmount;
+    @Column(name = "interest_rate", nullable = false)
+    private Double interestRate;
+    @Column(name = "duration", nullable = false)
+    private Integer duration;
+    @Column(name = "start_date")
+    private LocalDate startDate;
+    @Column(name = "status")
     private String status;
-    private Timestamp createdAt;
-    private Timestamp updatedAt;
+    @Column(name = "created_at")
+    private LocalDate createdAt;
+    @Column(name = "updated_at")
+    private LocalDate updatedAt;
+    @Column(name = "balance")
+    private Double balance;
 
     @ManyToOne
-    @JoinColumn(name = "customer_id")
+    @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
     public Loan(){}
-    public Loan(Integer loanId, BigDecimal loanAmount, BigDecimal interestRate, Integer tenure, String status, Timestamp createdAt, Timestamp updatedAt, Customer customer) {
+
+
+    public Loan(Integer loanId, String loanType, Double principalAmount, Double interestRate, Integer duration, LocalDate startDate, String status, LocalDate createdAt, LocalDate updatedAt, Double balance, Customer customer) {
         this.loanId = loanId;
-        this.loanAmount = loanAmount;
+        this.loanType = loanType;
+        this.principalAmount = principalAmount;
         this.interestRate = interestRate;
-        this.tenure = tenure;
+        this.duration = duration;
+        this.startDate = startDate;
         this.status = status;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.balance = balance;
         this.customer = customer;
     }
 
@@ -44,28 +65,52 @@ public class Loan {
         this.loanId = loanId;
     }
 
-    public BigDecimal getLoanAmount() {
-        return loanAmount;
+    public String getLoanType() {
+        return loanType;
     }
 
-    public void setLoanAmount(BigDecimal loanAmount) {
-        this.loanAmount = loanAmount;
+    public void setLoanType(String loanType) {
+        this.loanType = loanType;
     }
 
-    public BigDecimal getInterestRate() {
+    public Double getPrincipalAmount() {
+        return principalAmount;
+    }
+
+    public void setPrincipalAmount(Double principalAmount) {
+        this.principalAmount = principalAmount;
+    }
+
+    public Double getInterestRate() {
         return interestRate;
     }
 
-    public void setInterestRate(BigDecimal interestRate) {
+    public void setInterestRate(Double interestRate) {
         this.interestRate = interestRate;
     }
 
-    public Integer getTenure() {
-        return tenure;
+    public Integer getDuration() {
+        return duration;
     }
 
-    public void setTenure(Integer tenure) {
-        this.tenure = tenure;
+    public void setDuration(Integer duration) {
+        this.duration = duration;
+    }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
+    public Double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(Double balance) {
+        this.balance = balance;
     }
 
     public String getStatus() {
@@ -76,19 +121,19 @@ public class Loan {
         this.status = status;
     }
 
-    public Timestamp getCreatedAt() {
+    public LocalDate getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Timestamp createdAt) {
+    public void setCreatedAt(LocalDate createdAt) {
         this.createdAt = createdAt;
     }
 
-    public Timestamp getUpdatedAt() {
+    public LocalDate getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Timestamp updatedAt) {
+    public void setUpdatedAt(LocalDate updatedAt) {
         this.updatedAt = updatedAt;
     }
 
@@ -104,9 +149,11 @@ public class Loan {
     public String toString() {
         return "Loan{" +
                 "loanId=" + loanId +
-                ", loanAmount=" + loanAmount +
+                ", loanType='" + loanType + '\'' +
+                ", principalAmount=" + principalAmount +
                 ", interestRate=" + interestRate +
-                ", tenure=" + tenure +
+                ", duration=" + duration +
+                ", startDate=" + startDate +
                 ", status='" + status + '\'' +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +

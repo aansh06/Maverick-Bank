@@ -1,34 +1,62 @@
 package com.hexaware.MaverickBank.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "transaction")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "transactionId")
 public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer transactionId;
-
+    @Column(name = "transaction_type", nullable = false)
     private String transactionType;
+    @Column(name = "amount", nullable = false)
     private Double amount;
-    private Timestamp transactionDate;
-    private String destinationAccount;
+    @Column(name = "transaction_date", nullable = false)
+    private LocalDateTime transactionDate;
+//    private String destinationAccount;
+
+//    @ManyToOne
+//    @JoinColumn(name = "account_id", nullable = false)
+//    private Account account;
 
     @ManyToOne
-    @JoinColumn(name = "account_id")
-    private Account account;
+    @JoinColumn(name = "source_account_id", nullable = false)
+    private Account sourceAccount;
+
+
+    @ManyToOne
+    @JoinColumn(name = "destination_account_id", nullable = true)
+    private Account destinationAccount;
+
 
     public Transaction(){}
 
-    public Transaction(Integer transactionId, String transactionType, Double amount, Timestamp transactionDate, String destinationAccount, Account account) {
+    public Transaction(Integer transactionId, String transactionType, Double amount, LocalDateTime transactionDate, Account sourceAccount, Account destinationAccount) {
         this.transactionId = transactionId;
         this.transactionType = transactionType;
         this.amount = amount;
         this.transactionDate = transactionDate;
+        this.sourceAccount = sourceAccount;
         this.destinationAccount = destinationAccount;
-        this.account = account;
+    }
+
+    public Account getSourceAccount() {
+        return sourceAccount;
+    }
+
+    public void setSourceAccount(Account sourceAccount) {
+        this.sourceAccount = sourceAccount;
+    }
+
+    public void setDestinationAccount(Account destinationAccount) {
+        this.destinationAccount = destinationAccount;
     }
 
     public Integer getTransactionId() {
@@ -55,28 +83,33 @@ public class Transaction {
         this.amount = amount;
     }
 
-    public Timestamp getTransactionDate() {
+    public LocalDateTime getTransactionDate() {
         return transactionDate;
     }
 
-    public void setTransactionDate(Timestamp transactionDate) {
+    public void setTransactionDate(LocalDateTime transactionDate) {
         this.transactionDate = transactionDate;
     }
 
-    public String getDestinationAccount() {
+//    public String getDestinationAccount() {
+//        return destinationAccount;
+//    }
+//
+//    public void setDestinationAccount(String destinationAccount) {
+//        this.destinationAccount = destinationAccount;
+//    }
+//
+//    public Account getAccount() {
+//        return account;
+//    }
+//
+//    public void setAccount(Account account) {
+//        this.account = account;
+//    }
+
+
+    public Account getDestinationAccount() {
         return destinationAccount;
-    }
-
-    public void setDestinationAccount(String destinationAccount) {
-        this.destinationAccount = destinationAccount;
-    }
-
-    public Account getAccount() {
-        return account;
-    }
-
-    public void setAccount(Account account) {
-        this.account = account;
     }
 
     @Override
@@ -86,8 +119,8 @@ public class Transaction {
                 ", transactionType='" + transactionType + '\'' +
                 ", amount=" + amount +
                 ", transactionDate=" + transactionDate +
-                ", destinationAccount='" + destinationAccount + '\'' +
-                ", account=" + account +
+                ", sourceAccount=" + sourceAccount +
+                ", destinationAccount=" + destinationAccount +
                 '}';
     }
 }

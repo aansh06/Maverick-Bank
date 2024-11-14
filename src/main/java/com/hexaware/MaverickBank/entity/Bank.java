@@ -30,6 +30,7 @@ public class Bank {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+
     @OneToMany(mappedBy = "bank")
     private Set<BankEmployee> employees;
 

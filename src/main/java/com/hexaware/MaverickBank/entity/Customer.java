@@ -40,22 +40,24 @@ public class Customer {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+
     @ManyToOne
-    @JoinColumn(name = "bank_id",nullable = false)
+    @JoinColumn(name = "bank_id")
     private Bank bank;
 
     @ManyToOne
-    @JoinColumn(name = "role_id",nullable = false)
+    @JoinColumn(name = "role_id")
     private Role role;
 
-//    @OneToMany(mappedBy = "customer")
-//    private Set<Account> accounts;
-//
+    @OneToMany(mappedBy = "customer")
+    private Set<Account> accounts;
+
 //    @OneToMany(mappedBy = "customer")
 //    private Set<Loan> loans;
 //
 //    @OneToMany(mappedBy = "customer")
 //    private Set<Beneficiary> beneficiaries;
+//
 
     public Customer(){}
 
@@ -95,13 +97,13 @@ public class Customer {
 //        this.loans = loans;
 //    }
 //
-//    public Set<Account> getAccounts() {
-//        return accounts;
-//    }
-//
-//    public void setAccounts(Set<Account> accounts) {
-//        this.accounts = accounts;
-//    }
+    public Set<Account> getAccounts() {
+        return accounts;
+    }
+
+    public void setAccounts(Set<Account> accounts) {
+        this.accounts = accounts;
+    }
 
     public Role getRole() {
         return role;
@@ -111,13 +113,7 @@ public class Customer {
         this.role = role;
     }
 
-    public Bank getBank() {
-        return bank;
-    }
 
-    public void setBank(Bank bank) {
-        this.bank = bank;
-    }
 
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
@@ -215,6 +211,14 @@ public class Customer {
         this.customerId = customerId;
     }
 
+    public Bank getBank() {
+        return bank;
+    }
+
+    public void setBank(Bank bank) {
+        this.bank = bank;
+    }
+
     @Override
     public String toString() {
         return "Customer{" +
@@ -230,7 +234,6 @@ public class Customer {
                 ", dateOfBirth=" + dateOfBirth +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
-                ", bank=" + bank +
                 ", role=" + role +
 //                ", accounts=" + accounts +
 //                ", loans=" + loans +

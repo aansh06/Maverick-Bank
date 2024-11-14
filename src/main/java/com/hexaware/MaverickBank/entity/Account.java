@@ -24,32 +24,38 @@ public class Account {
 
 //    private String branchName;
 //    private String ifscCode;
-//
+
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-
-
-
-
-    @ManyToOne
-    @JoinColumn(name = "customer_id", nullable = false)
-    private Customer customer;
-
     @ManyToOne
     @JoinColumn(name = "bank_id", nullable = false)
     private Bank bank;
 
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
 
-    @OneToMany(mappedBy = "account")
-    private Set<Transaction> transactions;
+    @OneToMany(mappedBy = "sourceAccount", cascade = CascadeType.ALL)
+    private Set<Transaction> transactionsAsSource;
+
+    @OneToMany(mappedBy = "destinationAccount", cascade = CascadeType.ALL)
+    private Set<Transaction> transactionsAsDestination;
+
+//    @OneToMany(mappedBy = "account")
+//    private Set<Transaction> transactions;
+
+
+    //    @OneToMany(mappedBy = "customer")
+//    private Set<Beneficiary> beneficiaries;
+
 
     public Account(){}
 
-    public Account(Integer accountId, String accountType, String accountNumber, Double balance, String status, LocalDateTime createdAt, LocalDateTime updatedAt, Customer customer, Bank bank, Set<Transaction> transactions) {
+    public Account(Integer accountId, String accountType, String accountNumber, Double balance, String status, LocalDateTime createdAt, LocalDateTime updatedAt, Customer customer, Set<Transaction> transactionsAsSource, Set<Transaction> transactionsAsDestination) {
         this.accountId = accountId;
         this.accountType = accountType;
         this.accountNumber = accountNumber;
@@ -58,8 +64,8 @@ public class Account {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.customer = customer;
-        this.bank = bank;
-//        this.transactions = transactions;
+        this.transactionsAsSource = transactionsAsSource;
+        this.transactionsAsDestination = transactionsAsDestination;
     }
 
     public Integer getAccountId() {
@@ -150,7 +156,23 @@ public class Account {
         this.customer = customer;
     }
 
-//    public Set<Transaction> getTransactions() {
+    public Set<Transaction> getTransactionsAsSource() {
+        return transactionsAsSource;
+    }
+
+    public void setTransactionsAsSource(Set<Transaction> transactionsAsSource) {
+        this.transactionsAsSource = transactionsAsSource;
+    }
+
+    public Set<Transaction> getTransactionsAsDestination() {
+        return transactionsAsDestination;
+    }
+
+    public void setTransactionsAsDestination(Set<Transaction> transactionsAsDestination) {
+        this.transactionsAsDestination = transactionsAsDestination;
+    }
+
+    //    public Set<Transaction> getTransactions() {
 //        return transactions;
 //    }
 //
