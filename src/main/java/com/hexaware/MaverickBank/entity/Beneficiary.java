@@ -1,20 +1,31 @@
 package com.hexaware.MaverickBank.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "beneficiary")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "beneficiaryId")
 public class Beneficiary {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer beneficiaryId;
 
+    @Column(name = "name", nullable = false)
     private String beneficiaryName;
-    private String relationship;
+
+    @Column(name = "relationship", nullable = false)
+    private String relationship; //["Spouse", "Sibling", "Friend"]
+
+//    @Column(name = "account_number", nullable = false, unique = true)
+//    private String accountNumber;
 
     @ManyToOne
-    @JoinColumn(name = "customer_id")
+    @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
+
 
     public Beneficiary(){}
 

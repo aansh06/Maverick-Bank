@@ -52,51 +52,51 @@ public class Customer {
     @OneToMany(mappedBy = "customer")
     private Set<Account> accounts;
 
-//    @OneToMany(mappedBy = "customer")
-//    private Set<Loan> loans;
-//
-//    @OneToMany(mappedBy = "customer")
-//    private Set<Beneficiary> beneficiaries;
-//
+    @OneToMany(mappedBy = "customer")
+    private Set<Loan> loans;
+
+    @OneToMany(mappedBy = "customer")
+    private Set<Beneficiary> beneficiaries;
+
 
     public Customer(){}
 
-//    public Customer(Integer customerId, String firstName, String lastName, String email, String password, String contactNumber, String address, String aadharNumber, String panNumber, Date dateOfBirth, LocalDateTime createdAt, LocalDateTime updatedAt, Bank bank, Role role, Set<Account> accounts, Set<Loan> loans, Set<Beneficiary> beneficiaries) {
-//        this.customerId = customerId;
-//        this.firstName = firstName;
-//        this.lastName = lastName;
-//        this.email = email;
-//        this.password = password;
-//        this.contactNumber = contactNumber;
-//        this.address = address;
-//        this.aadharNumber = aadharNumber;
-//        this.panNumber = panNumber;
-//        this.dateOfBirth = dateOfBirth;
-//        this.createdAt = createdAt;
-//        this.updatedAt = updatedAt;
-//        this.bank = bank;
-//        this.role = role;
-//        this.accounts = accounts;
-//        this.loans = loans;
-//        this.beneficiaries = beneficiaries;
-//    }
+    public Customer(Integer customerId, String firstName, String lastName, String email, String password, String contactNumber, String address, String aadharNumber, String panNumber, Date dateOfBirth, LocalDateTime createdAt, LocalDateTime updatedAt, Bank bank, Role role, Set<Account> accounts, Set<Loan> loans, Set<Beneficiary> beneficiaries) {
+        this.customerId = customerId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.contactNumber = contactNumber;
+        this.address = address;
+        this.aadharNumber = aadharNumber;
+        this.panNumber = panNumber;
+        this.dateOfBirth = dateOfBirth;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.bank = bank;
+        this.role = role;
+        this.accounts = accounts;
+        this.loans = loans;
+        this.beneficiaries = beneficiaries;
+    }
 
-//    public Set<Beneficiary> getBeneficiaries() {
-//        return beneficiaries;
-//    }
-//
-//    public void setBeneficiaries(Set<Beneficiary> beneficiaries) {
-//        this.beneficiaries = beneficiaries;
-//    }
-//
-//    public Set<Loan> getLoans() {
-//        return loans;
-//    }
-//
-//    public void setLoans(Set<Loan> loans) {
-//        this.loans = loans;
-//    }
-//
+    public Set<Beneficiary> getBeneficiaries() {
+        return beneficiaries;
+    }
+
+    public void setBeneficiaries(Set<Beneficiary> beneficiaries) {
+        this.beneficiaries = beneficiaries;
+    }
+
+    public Set<Loan> getLoans() {
+        return loans;
+    }
+
+    public void setLoans(Set<Loan> loans) {
+        this.loans = loans;
+    }
+
     public Set<Account> getAccounts() {
         return accounts;
     }
@@ -235,9 +235,9 @@ public class Customer {
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 ", role=" + role +
-//                ", accounts=" + accounts +
-//                ", loans=" + loans +
-//                ", beneficiaries=" + beneficiaries +
+                ", accounts=" + accounts +
+                ", loans=" + loans +
+                ", beneficiaries=" + beneficiaries +
                 '}';
     }
 }
