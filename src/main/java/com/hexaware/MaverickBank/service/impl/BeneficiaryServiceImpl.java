@@ -1,9 +1,11 @@
 package com.hexaware.MaverickBank.service.impl;
 
 import com.hexaware.MaverickBank.dto.BeneficiaryDTO;
+import com.hexaware.MaverickBank.entity.Account;
 import com.hexaware.MaverickBank.entity.Beneficiary;
 import com.hexaware.MaverickBank.entity.Customer;
-import com.hexaware.MaverickBank.exception.ResourceNotFoundException;
+import com.hexaware.MaverickBank.globalexception.ResourceNotFoundException;
+import com.hexaware.MaverickBank.repository.AccountRepository;
 import com.hexaware.MaverickBank.repository.BeneficiaryRepository;
 import com.hexaware.MaverickBank.repository.CustomerRepository;
 import com.hexaware.MaverickBank.service.BeneficiaryService;
@@ -11,30 +13,41 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 public class BeneficiaryServiceImpl implements BeneficiaryService {
 
     private final BeneficiaryRepository beneficiaryRepository;
+    private final AccountRepository accountRepository;
     private final CustomerRepository customerRepository;
 
     @Autowired
-    public BeneficiaryServiceImpl(BeneficiaryRepository beneficiaryRepository, CustomerRepository customerRepository) {
+    public BeneficiaryServiceImpl(BeneficiaryRepository beneficiaryRepository, AccountRepository accountRepository, CustomerRepository customerRepository) {
         this.beneficiaryRepository = beneficiaryRepository;
+        this.accountRepository = accountRepository;
         this.customerRepository = customerRepository;
     }
 
     @Override
     public BeneficiaryDTO createBeneficiary(BeneficiaryDTO beneficiaryDTO) {
-        Customer customer = customerRepository.findById(beneficiaryDTO.getCustomerId())
-                .orElseThrow(() -> new ResourceNotFoundException("Customer not found"));
-
         Beneficiary beneficiary = new Beneficiary();
         beneficiary.setBeneficiaryName(beneficiaryDTO.getName());
         beneficiary.setRelationship(beneficiaryDTO.getRelationship());
 //        beneficiary.setAccountNumber(beneficiaryDTO.getAccountNumber());
-        beneficiary.setCustomer(customer);
+
+        if (beneficiaryDTO.getLinkedCustomerId() != null) {
+            Customer linkedCustomer = customerRepository.findById(beneficiaryDTO.getLinkedCustomerId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Customer not found"));
+            beneficiary.setLinkedCustomer(linkedCustomer);
+        }
+
+        Set<Account> accounts = beneficiaryDTO.getAccountIds().stream()
+                .map(accountId -> accountRepository.findById(accountId)
+                        .orElseThrow(() -> new ResourceNotFoundException("Account not found")))
+                .collect(Collectors.toSet());
+        beneficiary.setAccounts(accounts);
 
         Beneficiary savedBeneficiary = beneficiaryRepository.save(beneficiary);
         return convertToDTO(savedBeneficiary);
@@ -58,13 +71,25 @@ public class BeneficiaryServiceImpl implements BeneficiaryService {
         Beneficiary beneficiary = beneficiaryRepository.findById(beneficiaryId)
                 .orElseThrow(() -> new ResourceNotFoundException("Beneficiary not found"));
 
-        Customer customer = customerRepository.findById(beneficiaryDTO.getCustomerId())
-                .orElseThrow(() -> new ResourceNotFoundException("Customer not found"));
+        if (beneficiaryDTO.getLinkedCustomerId() != null) {
+            Customer linkedCustomer = customerRepository.findById(beneficiaryDTO.getLinkedCustomerId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Customer not found"));
+            beneficiary.setLinkedCustomer(linkedCustomer);
+        } else {
+            beneficiary.setLinkedCustomer(null);
+        }
 
         beneficiary.setBeneficiaryName(beneficiaryDTO.getName());
         beneficiary.setRelationship(beneficiaryDTO.getRelationship());
-//        beneficiary.setAccountNumber(beneficiaryDTO.getAccountNumber());
-        beneficiary.setCustomer(customer);
+
+
+        if (beneficiaryDTO.getAccountIds() != null) {
+            Set<Account> updatedAccounts = beneficiaryDTO.getAccountIds().stream()
+                    .map(accountId -> accountRepository.findById(accountId)
+                            .orElseThrow(() -> new ResourceNotFoundException("Account not found")))
+                    .collect(Collectors.toSet());
+            beneficiary.setAccounts(updatedAccounts);
+        }
 
         Beneficiary updatedBeneficiary = beneficiaryRepository.save(beneficiary);
         return convertToDTO(updatedBeneficiary);
@@ -84,7 +109,8 @@ public class BeneficiaryServiceImpl implements BeneficiaryService {
         dto.setName(beneficiary.getBeneficiaryName());
         dto.setRelationship(beneficiary.getRelationship());
 //        dto.setAccountNumber(beneficiary.getAccountNumber());
-        dto.setCustomerId(beneficiary.getCustomer().getCustomerId());
+        dto.setLinkedCustomerId(beneficiary.getLinkedCustomer() != null ? beneficiary.getLinkedCustomer().getCustomerId() : null);
+        dto.setAccountIds(beneficiary.getAccounts().stream().map(Account::getAccountId).collect(Collectors.toSet()));
         return dto;
     }
 }

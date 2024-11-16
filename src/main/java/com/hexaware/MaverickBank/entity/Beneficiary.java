@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 
+import java.util.Set;
+
 @Entity
 @Table(name = "beneficiary")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "beneficiaryId")
@@ -23,17 +25,21 @@ public class Beneficiary {
 //    private String accountNumber;
 
     @ManyToOne
-    @JoinColumn(name = "customer_id", nullable = false)
-    private Customer customer;
+    @JoinColumn(name = "linked_customer_id")
+    private Customer linkedCustomer;
+
+    @ManyToMany(mappedBy = "beneficiaries")
+    private Set<Account> accounts;
 
 
     public Beneficiary(){}
 
-    public Beneficiary(Integer beneficiaryId, String beneficiaryName, String relationship, Customer customer) {
+    public Beneficiary(Integer beneficiaryId, String beneficiaryName, String relationship, Customer linkedCustomer,Set<Account> accounts) {
         this.beneficiaryId = beneficiaryId;
         this.beneficiaryName = beneficiaryName;
         this.relationship = relationship;
-        this.customer = customer;
+        this.linkedCustomer = linkedCustomer;
+        this.accounts=accounts;
     }
 
     public Integer getBeneficiaryId() {
@@ -60,12 +66,20 @@ public class Beneficiary {
         this.relationship = relationship;
     }
 
-    public Customer getCustomer() {
-        return customer;
+    public Customer getLinkedCustomer() {
+        return linkedCustomer;
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public void setLinkedCustomer(Customer linkedCustomer) {
+        this.linkedCustomer = linkedCustomer;
+    }
+
+    public Set<Account> getAccounts() {
+        return accounts;
+    }
+
+    public void setAccounts(Set<Account> accounts) {
+        this.accounts = accounts;
     }
 
     @Override
@@ -74,7 +88,8 @@ public class Beneficiary {
                 "beneficiaryId=" + beneficiaryId +
                 ", beneficiaryName='" + beneficiaryName + '\'' +
                 ", relationship='" + relationship + '\'' +
-                ", customer=" + customer +
+                ", linkedCustomer=" + linkedCustomer +
+                ", accounts=" + accounts +
                 '}';
     }
 }

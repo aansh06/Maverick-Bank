@@ -28,7 +28,8 @@ public class Loan {
     @Column(name = "start_date")
     private LocalDate startDate;
     @Column(name = "status")
-    private String status;
+    private String status;  //[ "Pending", "Approved", "Closed"]
+
     @Column(name = "created_at")
     private LocalDate createdAt;
     @Column(name = "updated_at")

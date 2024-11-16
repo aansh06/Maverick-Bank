@@ -37,4 +37,25 @@ public class TransactionController {
         List<TransactionDTO> transactions = transactionService.getAllTransactions();
         return new ResponseEntity<>(transactions, HttpStatus.OK);
     }
+    //    to get all the transaction of an particular account by its account id
+    @GetMapping("/account/{id}")
+    public  ResponseEntity<List<TransactionDTO>> getAllTransactionsByAccount(@PathVariable("id") Integer id){
+        List<TransactionDTO> transactions = transactionService.getTransactionsByAccountId(id);
+        return new ResponseEntity<>(transactions, HttpStatus.OK);
+    }
+
+    //    to get all the credit transaction of a particular account by its account id
+    @GetMapping("/accountCredit/{id}")
+    public  ResponseEntity<List<TransactionDTO>> getAllCreditTransactionsByAccount(@PathVariable("id") Integer id){
+        List<TransactionDTO> transactions = transactionService.getCreditTransactions(id);
+        return new ResponseEntity<>(transactions, HttpStatus.OK);
+    }
+
+    //    to get all the debit transaction of a particular account by its account id
+    @GetMapping("/accountDebit/{id}")
+    public  ResponseEntity<List<TransactionDTO>> getAllDebitTransactionsByAccount(@PathVariable("id") Integer id){
+        List<TransactionDTO> transactions = transactionService.getDebitTransactions(id);
+        return new ResponseEntity<>(transactions, HttpStatus.OK);
+    }
+
 }

@@ -50,4 +50,32 @@ public class LoanController {
         loanService.deleteLoan(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @GetMapping("/customer/{id}")
+    public ResponseEntity<List<LoanDTO>> getLoanByCustomerId(@PathVariable("id") Integer id) {
+        List<LoanDTO> loan = loanService.getLoansByCustomerId(id);
+        return new ResponseEntity<>(loan, HttpStatus.OK);
+    }
+
+
+    @GetMapping("/{loanId}/emi")
+    public ResponseEntity<Double> calculateEmi(@PathVariable("loanId") Integer loanId) {
+        Double emi = loanService.calculateEmi(loanId);
+        return new ResponseEntity<>(emi, HttpStatus.OK);
+    }
+
+    @GetMapping("/{loanId}/remaining")
+    public ResponseEntity<Double> getRemainingUnpaidAmount(@PathVariable("loanId") Integer loanId) {
+        Double remainingAmount = loanService.getRemainingUnpaidAmount(loanId);
+        return new ResponseEntity<>(remainingAmount, HttpStatus.OK);
+    }
+
+    @PostMapping("/{loanId}/pay-emi")
+    public ResponseEntity<String> payEmi(@PathVariable("loanId") Integer loanId, @RequestParam("accountId") Integer accountId) {
+        loanService.payEmi(loanId, accountId);
+        return new ResponseEntity<>("EMI payment successful", HttpStatus.OK);
+    }
+
+
+
 }

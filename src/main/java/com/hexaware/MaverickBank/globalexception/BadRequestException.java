@@ -1,4 +1,4 @@
-package com.hexaware.MaverickBank.exception;
+package com.hexaware.MaverickBank.globalexception;
 
 public class BadRequestException extends RuntimeException {
     public BadRequestException(String message) {

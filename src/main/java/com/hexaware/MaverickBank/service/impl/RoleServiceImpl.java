@@ -2,7 +2,7 @@ package com.hexaware.MaverickBank.service.impl;
 
 import com.hexaware.MaverickBank.dto.RoleDTO;
 import com.hexaware.MaverickBank.entity.Role;
-import com.hexaware.MaverickBank.exception.ResourceNotFoundException;
+import com.hexaware.MaverickBank.globalexception.ResourceNotFoundException;
 import com.hexaware.MaverickBank.repository.RoleRepository;
 import com.hexaware.MaverickBank.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;

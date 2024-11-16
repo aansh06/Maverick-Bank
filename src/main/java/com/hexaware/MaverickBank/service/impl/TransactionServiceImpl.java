@@ -3,8 +3,8 @@ package com.hexaware.MaverickBank.service.impl;
 import com.hexaware.MaverickBank.dto.TransactionDTO;
 import com.hexaware.MaverickBank.entity.Account;
 import com.hexaware.MaverickBank.entity.Transaction;
-import com.hexaware.MaverickBank.exception.InsufficientFundsException;
-import com.hexaware.MaverickBank.exception.ResourceNotFoundException;
+import com.hexaware.MaverickBank.globalexception.InsufficientFundsException;
+import com.hexaware.MaverickBank.globalexception.ResourceNotFoundException;
 import com.hexaware.MaverickBank.repository.AccountRepository;
 import com.hexaware.MaverickBank.repository.TransactionRepository;
 import com.hexaware.MaverickBank.service.TransactionService;
@@ -31,8 +31,8 @@ public class TransactionServiceImpl implements TransactionService {
         Account sourceAccount = accountRepository.findById(transactionDTO.getSourceAccountId())
                 .orElseThrow(() -> new ResourceNotFoundException("Source account not found"));
 
-        Account destinationAccount = null;
-        if (transactionDTO.getDestinationAccountId() != null) {
+        Account destinationAccount=null;
+        if(transactionDTO.getDestinationAccountId() != null) {
             destinationAccount = accountRepository.findById(transactionDTO.getDestinationAccountId())
                     .orElseThrow(() -> new ResourceNotFoundException("Destination account not found"));
         }
@@ -46,29 +46,44 @@ public class TransactionServiceImpl implements TransactionService {
 
         double transactionAmount = transactionDTO.getAmount();
 
-        if ("Debit".equalsIgnoreCase(transactionDTO.getTransactionType())) {
-            if (sourceAccount.getBalance() < transactionAmount) {
-                throw new InsufficientFundsException("Insufficient balance in source account");
-            }
-            sourceAccount.setBalance(sourceAccount.getBalance() - transactionAmount);
-            destinationAccount.setBalance(destinationAccount.getBalance() + transactionAmount);
+
+        switch (transactionDTO.getTransactionType().toLowerCase()) {
+            case "deposit":
+
+                if (sourceAccount.getBalance().compareTo(transactionAmount) < 0) {
+                    throw new InsufficientFundsException("Insufficient balance in source account");
+                }
+                sourceAccount.setBalance(sourceAccount.getBalance() + transactionAmount);
+                break;
+
+            case "withdraw":
+
+                sourceAccount.setBalance(sourceAccount.getBalance() - transactionAmount);
+                break;
+
+            case "transfer":
+
+                if (destinationAccount == null) {
+                    throw new IllegalArgumentException("Destination account is required for transfer transactions");
+                }
+                if (sourceAccount.getBalance().compareTo(transactionAmount) < 0) {
+                    throw new InsufficientFundsException("Insufficient balance in source account for transfer");
+                }
+                sourceAccount.setBalance(sourceAccount.getBalance() - transactionAmount);
+                destinationAccount.setBalance(destinationAccount.getBalance() + transactionAmount);
+                break;
+
+            default:
+                throw new IllegalArgumentException("Invalid transaction type");
         }
-//        } else if ("Credit".equalsIgnoreCase(transactionDTO.getTransactionType())) {
-//            sourceAccount.setBalance(sourceAccount.getBalance() + transactionAmount);
-//        } else if ("Transfer".equalsIgnoreCase(transactionDTO.getTransactionType())) {
-//            if (destinationAccount == null) {
-//                throw new IllegalArgumentException("Destination account is required for transfer transactions");
-//            }
-//            if (sourceAccount.getBalance() < transactionAmount) {
-//                throw new InsufficientFundsException("Insufficient balance in source account for transfer");
-//            }
-//            sourceAccount.setBalance(sourceAccount.getBalance() - transactionAmount);
-//            destinationAccount.setBalance(destinationAccount.getBalance() + transactionAmount);
-//        }
 
         accountRepository.save(sourceAccount);
+        if(destinationAccount!=null) {
+            accountRepository.save(destinationAccount);
+        }
         Transaction savedTransaction = transactionRepository.save(transaction);
         return convertToDTO(savedTransaction);
+
     }
 
     @Override
@@ -84,14 +99,37 @@ public class TransactionServiceImpl implements TransactionService {
         return transactions.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
+    @Override
+    public List<TransactionDTO> getTransactionsByAccountId(Integer accountId) {
+        List<Transaction> accountTransactions = transactionRepository.findBySourceAccount_AccountIdOrDestinationAccount_AccountId(accountId, accountId);
+        return accountTransactions.stream().map(this::convertToDTO).collect(Collectors.toList());
+    }
+
     private TransactionDTO convertToDTO(Transaction transaction) {
         TransactionDTO dto = new TransactionDTO();
         dto.setTransactionType(transaction.getTransactionType());
         dto.setAmount(transaction.getAmount());
         dto.setTransactionDate(transaction.getTransactionDate());
         dto.setSourceAccountId(transaction.getSourceAccount().getAccountId());
-        dto.setDestinationAccountId(transaction.getDestinationAccount().getAccountId());
-
+        if (transaction.getDestinationAccount() != null) {
+            dto.setDestinationAccountId(transaction.getDestinationAccount().getAccountId());
+        }
         return dto;
+    }
+
+    @Override
+    public List<TransactionDTO> getCreditTransactions(Integer accountId) {
+        List<Transaction> creditTransactions = transactionRepository
+                .findByTransactionTypeAndSourceAccount_AccountIdOrTransactionTypeAndDestinationAccount_AccountId(
+                        "deposit", accountId, "transfer", accountId);
+        return creditTransactions.stream().map(this::convertToDTO).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<TransactionDTO> getDebitTransactions(Integer accountId) {
+        List<Transaction> debitTransactions = transactionRepository
+                .findByTransactionTypeAndSourceAccount_AccountIdOrTransactionTypeAndSourceAccount_AccountId(
+                        "withdraw", accountId, "transfer", accountId);
+        return debitTransactions.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 }

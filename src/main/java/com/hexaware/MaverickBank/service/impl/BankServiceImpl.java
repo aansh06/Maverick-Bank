@@ -3,7 +3,7 @@ package com.hexaware.MaverickBank.service.impl;
 
 import com.hexaware.MaverickBank.dto.BankDTO;
 import com.hexaware.MaverickBank.entity.Bank;
-import com.hexaware.MaverickBank.exception.ResourceNotFoundException;
+import com.hexaware.MaverickBank.globalexception.ResourceNotFoundException;
 import com.hexaware.MaverickBank.repository.BankRepository;
 import com.hexaware.MaverickBank.service.BankService;
 import org.springframework.beans.factory.annotation.Autowired;

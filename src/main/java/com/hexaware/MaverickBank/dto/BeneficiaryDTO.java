@@ -1,21 +1,16 @@
 package com.hexaware.MaverickBank.dto;
 
+import java.util.Set;
+
 public class BeneficiaryDTO {
     private Integer beneficiaryId;
     private String name;
     private String relationship;
 //    private String accountNumber;
-    private Integer customerId;
+    private Integer linkedCustomerId;
+    private Set<Integer> accountIds;
 
     public BeneficiaryDTO(){}
-
-    public BeneficiaryDTO(Integer beneficiaryId, String name, String relationship,  Integer customerId) {
-        this.beneficiaryId = beneficiaryId;
-        this.name = name;
-        this.relationship = relationship;
-//        this.accountNumber = accountNumber;
-        this.customerId = customerId;
-    }
 
     public Integer getBeneficiaryId() {
         return beneficiaryId;
@@ -41,19 +36,19 @@ public class BeneficiaryDTO {
         this.relationship = relationship;
     }
 
-//    public String getAccountNumber() {
-//        return accountNumber;
-//    }
-//
-//    public void setAccountNumber(String accountNumber) {
-//        this.accountNumber = accountNumber;
-//    }
-
-    public Integer getCustomerId() {
-        return customerId;
+    public Integer getLinkedCustomerId() {
+        return linkedCustomerId;
     }
 
-    public void setCustomerId(Integer customerId) {
-        this.customerId = customerId;
+    public void setLinkedCustomerId(Integer linkedCustomerId) {
+        this.linkedCustomerId = linkedCustomerId;
+    }
+
+    public Set<Integer> getAccountIds() {
+        return accountIds;
+    }
+
+    public void setAccountIds(Set<Integer> accountIds) {
+        this.accountIds = accountIds;
     }
 }

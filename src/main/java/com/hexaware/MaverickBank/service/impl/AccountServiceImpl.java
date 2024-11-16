@@ -4,7 +4,7 @@ import com.hexaware.MaverickBank.dto.AccountDTO;
 import com.hexaware.MaverickBank.entity.Account;
 import com.hexaware.MaverickBank.entity.Bank;
 import com.hexaware.MaverickBank.entity.Customer;
-import com.hexaware.MaverickBank.exception.ResourceNotFoundException;
+import com.hexaware.MaverickBank.globalexception.ResourceNotFoundException;
 import com.hexaware.MaverickBank.repository.AccountRepository;
 import com.hexaware.MaverickBank.repository.BankRepository;
 import com.hexaware.MaverickBank.repository.CustomerRepository;

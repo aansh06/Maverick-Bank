@@ -55,9 +55,9 @@ public class Customer {
     @OneToMany(mappedBy = "customer")
     private Set<Loan> loans;
 
-    @OneToMany(mappedBy = "customer")
-    private Set<Beneficiary> beneficiaries;
 
+    @OneToMany(mappedBy = "linkedCustomer")
+    private Set<Beneficiary> beneficiaries;
 
     public Customer(){}
 

@@ -1,4 +1,4 @@
-package com.hexaware.MaverickBank.exception;
+package com.hexaware.MaverickBank.globalexception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

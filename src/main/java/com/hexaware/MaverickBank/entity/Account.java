@@ -3,7 +3,6 @@ package com.hexaware.MaverickBank.entity;
 import jakarta.persistence.*;
 
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -14,7 +13,7 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer accountId;
     @Column(name = "account_type", nullable = false)
-    private String accountType;
+    private String accountType; // [savings, checking, business,]
     @Column(name = "account_number", unique = true, nullable = false)
     private String accountNumber;
     @Column(name = "balance", nullable = false)
@@ -39,19 +38,22 @@ public class Account {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    @OneToMany(mappedBy = "sourceAccount", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "sourceAccount")
     private Set<Transaction> transactionsAsSource;
 
-    @OneToMany(mappedBy = "destinationAccount", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "destinationAccount")
     private Set<Transaction> transactionsAsDestination;
 
 //    @OneToMany(mappedBy = "account")
 //    private Set<Transaction> transactions;
 
-
-    //    @OneToMany(mappedBy = "customer")
-//    private Set<Beneficiary> beneficiaries;
-
+    @ManyToMany
+    @JoinTable(
+            name = "account_beneficiary",
+            joinColumns = @JoinColumn(name = "account_id"),
+            inverseJoinColumns = @JoinColumn(name = "beneficiary_id")
+    )
+    private Set<Beneficiary> beneficiaries;
 
     public Account(){}
 
@@ -64,6 +66,7 @@ public class Account {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.customer = customer;
+       // this.beneficiaries=beneficiaries;
         this.transactionsAsSource = transactionsAsSource;
         this.transactionsAsDestination = transactionsAsDestination;
     }
@@ -181,4 +184,11 @@ public class Account {
 //    }
 
 
+//    public Set<Beneficiary> getBeneficiaries() {
+//        return beneficiaries;
+//    }
+//
+//    public void setBeneficiaries(Set<Beneficiary> beneficiaries) {
+//        this.beneficiaries = beneficiaries;
+//    }
 }

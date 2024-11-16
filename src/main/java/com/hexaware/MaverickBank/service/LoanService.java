@@ -10,4 +10,9 @@ public interface LoanService {
     List<LoanDTO> getAllLoans();
     LoanDTO updateLoan(Integer loanId, LoanDTO loanDTO);
     void deleteLoan(Integer loanId);
+    List<LoanDTO> getLoansByCustomerId(Integer customerId);
+    Double calculateEmi(Integer loanId);
+    Double getRemainingUnpaidAmount(Integer loanId);
+    void payEmi(Integer loanId, Integer accountId);
+
 }
