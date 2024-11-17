@@ -11,6 +11,7 @@ import com.hexaware.MaverickBank.repository.CustomerRepository;
 import com.hexaware.MaverickBank.repository.RoleRepository;
 import com.hexaware.MaverickBank.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -23,12 +24,14 @@ public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
     private final BankRepository bankRepository;
     private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public CustomerServiceImpl(CustomerRepository customerRepository, BankRepository bankRepository, RoleRepository roleRepository) {
+    public CustomerServiceImpl(CustomerRepository customerRepository, BankRepository bankRepository, RoleRepository roleRepository,PasswordEncoder passwordEncoder) {
         this.customerRepository = customerRepository;
         this.bankRepository = bankRepository;
         this.roleRepository = roleRepository;
+        this.passwordEncoder=passwordEncoder;
     }
 
     @Override
@@ -42,7 +45,7 @@ public class CustomerServiceImpl implements CustomerService {
         customer.setFirstName(customerDTO.getFirstName());
         customer.setLastName(customerDTO.getLastName());
         customer.setEmail(customerDTO.getEmail());
-        customer.setPassword(customerDTO.getPassword());
+        customer.setPassword(passwordEncoder.encode(customerDTO.getPassword()));
         customer.setContactNumber(customerDTO.getContactNumber());
         customer.setAddress(customerDTO.getAddress());
         customer.setAadharNumber(customerDTO.getAadharNumber());

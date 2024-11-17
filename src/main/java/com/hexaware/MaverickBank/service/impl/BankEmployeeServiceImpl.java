@@ -10,6 +10,7 @@ import com.hexaware.MaverickBank.repository.BankRepository;
 import com.hexaware.MaverickBank.repository.RoleRepository;
 import com.hexaware.MaverickBank.service.BankEmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -22,12 +23,14 @@ public class BankEmployeeServiceImpl implements BankEmployeeService {
     private final BankEmployeeRepository bankEmployeeRepository;
     private final BankRepository bankRepository;
     private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public BankEmployeeServiceImpl(BankEmployeeRepository bankEmployeeRepository, BankRepository bankRepository, RoleRepository roleRepository) {
+    public BankEmployeeServiceImpl(BankEmployeeRepository bankEmployeeRepository, BankRepository bankRepository, RoleRepository roleRepository,PasswordEncoder passwordEncoder) {
         this.bankEmployeeRepository = bankEmployeeRepository;
         this.bankRepository = bankRepository;
         this.roleRepository = roleRepository;
+        this.passwordEncoder=passwordEncoder;
     }
 
     @Override
@@ -41,7 +44,7 @@ public class BankEmployeeServiceImpl implements BankEmployeeService {
         bankEmployee.setFirstName(bankEmployeeDTO.getFirstName());
         bankEmployee.setLastName(bankEmployeeDTO.getLastName());
         bankEmployee.setEmail(bankEmployeeDTO.getEmail());
-        bankEmployee.setPassword(bankEmployeeDTO.getPassword());
+        bankEmployee.setPassword(passwordEncoder.encode(bankEmployeeDTO.getPassword()));
         bankEmployee.setBank(bank);
         bankEmployee.setRole(role);
         bankEmployee.setCreatedAt(LocalDateTime.now());
